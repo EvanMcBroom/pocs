@@ -1,42 +1,10 @@
 from ctypes import *
 from ctypes.wintypes import *
 
-Kernel32 = windll.kernel32
-
 ##
-# Function prototypes
+# Toolhelp Snapshot Flags
 #
-CloseHandle          = Kernel32.CloseHandle
-CloseHandle.argtypes = [HMODULE]
-CloseHandle.restype  = BOOL
-
-CreateRemoteThread          = Kernel32.CreateRemoteThread
-CreateRemoteThread.argtypes = [HANDLE, LPVOID, DWORD, LPVOID, LPVOID, DWORD, LPDWORD]
-CreateRemoteThread.restype  = HANDLE
-
-GetModuleHandleW          = Kernel32.GetModuleHandleW
-GetModuleHandleW.argtypes = [LPCWSTR]
-GetModuleHandleW.restype  = HMODULE
-
-GetProcAddress          = Kernel32.GetProcAddress
-GetProcAddress.argtypes = [HMODULE, LPCSTR]
-GetProcAddress.restype  = LPVOID
-
-LoadLibraryW          = Kernel32.LoadLibraryW
-LoadLibraryW.argtypes = [LPCWSTR]
-LoadLibraryW.restype  = HMODULE
-
-OpenProcess          = Kernel32.OpenProcess
-OpenProcess.argtypes = [DWORD, BOOL, DWORD]
-OpenProcess.restype  = HANDLE
-
-VirtualAllocEx          = Kernel32.VirtualAllocEx
-VirtualAllocEx.argtypes = [HANDLE, LPVOID, DWORD, DWORD, DWORD]
-VirtualAllocEx.restype  = LPVOID
-
-WriteProcessMemory          = Kernel32.WriteProcessMemory
-WriteProcessMemory.argtypes = [HANDLE, LPVOID, LPCVOID, DWORD, LPDWORD]
-WriteProcessMemory.restype  = BOOL
+TH32CS_SNAPPROCESS = 0x00000002
 
 ##
 # Memory Allocation Constants
@@ -65,3 +33,78 @@ PROCESS_ALL_ACCESS = ( DELETE       |
                        SYNCHRONIZE  |
                        0xFFFF       # If version >= VISTA, else 0xFFF
                      )
+
+##
+# Path Constants
+#
+MAX_PATH = 260
+
+##
+# Structures
+#
+class tagPROCESSENTRY32(Structure):
+    """Represent the tagPROCESSENTRY32 on TlHelp32.h"""
+    _fields_ = [
+        ("dwSize",              DWORD),
+        ("cntUsage",            DWORD),
+        ("th32ProcessID",       DWORD),
+        ("th32DefaultHeapID",   LPVOID),
+        ("th32ModuleID",        DWORD),
+        ("cntThreads",          DWORD),
+        ("th32ParentProcessID", DWORD),
+        ("pcPriClassBase",      LONG),
+        ("dwFlags",             DWORD),
+        ("szExeFile",           CHAR * MAX_PATH),
+    ]
+
+PROCESSENTRY32   = tagPROCESSENTRY32
+LPPROCESSENTRY32 = LPVOID
+
+##
+# Function prototypes
+#
+Kernel32 = windll.kernel32
+
+CloseHandle          = Kernel32.CloseHandle
+CloseHandle.argtypes = [HMODULE]
+CloseHandle.restype  = BOOL
+
+CreateRemoteThread          = Kernel32.CreateRemoteThread
+CreateRemoteThread.argtypes = [HANDLE, LPVOID, DWORD, LPVOID, LPVOID, DWORD, LPDWORD]
+CreateRemoteThread.restype  = HANDLE
+
+CreateToolhelp32Snapshot          = Kernel32.CreateToolhelp32Snapshot
+CreateToolhelp32Snapshot.argtypes = [DWORD, DWORD]
+CreateToolhelp32Snapshot.restype  = HANDLE
+
+GetModuleHandleW          = Kernel32.GetModuleHandleW
+GetModuleHandleW.argtypes = [LPCWSTR]
+GetModuleHandleW.restype  = HMODULE
+
+GetProcAddress          = Kernel32.GetProcAddress
+GetProcAddress.argtypes = [HMODULE, LPCSTR]
+GetProcAddress.restype  = LPVOID
+
+LoadLibraryW          = Kernel32.LoadLibraryW
+LoadLibraryW.argtypes = [LPCWSTR]
+LoadLibraryW.restype  = HMODULE
+
+OpenProcess          = Kernel32.OpenProcess
+OpenProcess.argtypes = [DWORD, BOOL, DWORD]
+OpenProcess.restype  = HANDLE
+
+Process32First          = Kernel32.Process32First
+Process32First.argtypes = [HANDLE, LPPROCESSENTRY32]
+Process32First.restype  = BOOL
+
+Process32Next          = Kernel32.Process32Next
+Process32Next.argtypes = [HANDLE, LPPROCESSENTRY32]
+Process32Next.restype  = BOOL
+
+VirtualAllocEx          = Kernel32.VirtualAllocEx
+VirtualAllocEx.argtypes = [HANDLE, LPVOID, DWORD, DWORD, DWORD]
+VirtualAllocEx.restype  = LPVOID
+
+WriteProcessMemory          = Kernel32.WriteProcessMemory
+WriteProcessMemory.argtypes = [HANDLE, LPVOID, LPCVOID, DWORD, LPDWORD]
+WriteProcessMemory.restype  = BOOL
