@@ -10,7 +10,7 @@ My Proof of Concept code for different publicly disclosed vulnerabilities
 ## Forced Authentication
 | Date | Description | Found |
 | --- | --- | --- |
-| :calendar: Aug 12, 2022 | [Coerce MS-FAX - Coerce machine authentication via MS-FAX.](Coerce-MS-FAX) | :heavy_check_mark: |
+| :calendar: Aug 12, 2022 | [Coerce MS-FAX - Coerce a machine account to authenticate via MS-FAX](Coerce-MS-FAX) | :heavy_check_mark: |
 
 ## Remote Code Execution
 | Date | Description | Found |
