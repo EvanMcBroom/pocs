@@ -21,6 +21,7 @@ All other issues are attributed to the original researcher, if known.
 
 | POC Date | Description | Finder |
 | --- | --- | --- |
+| :calendar: May 15, 2024 | [ChangeMachinePassword - Arbitrary pointer dereference in LSASS](MSRC-VULN-114839) | [:heavy_check_mark:](https://twitter.com/mcbroom_evan) |
 | :calendar: Dec 5, 2023 | [VULN-114840 - Arbitrary pointer dereference in LSASS](MSRC-VULN-114840) | [:heavy_check_mark:](https://twitter.com/mcbroom_evan) |
 | :calendar: Dec 5, 2023 | [VULN-114839 - Arbitrary pointer dereference in LSASS](MSRC-VULN-114839) | [:heavy_check_mark:](https://twitter.com/mcbroom_evan) |
 
