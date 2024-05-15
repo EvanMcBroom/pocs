@@ -30,7 +30,7 @@ All other issues are attributed to the original researcher, if known.
 
 | POC Date | Description | Finder |
 | --- | --- | --- |
-| :calendar: Mar 17, 2023 | [CVE-2024-26209 - Memory leak in LSASS](MSRC-VULN-114841) | [:heavy_check_mark:](https://twitter.com/mcbroom_evan) |
+| :calendar: Mar 17, 2023 | [CVE-2024-26209 - Memory leak in LSASS](CVE-2024-26209) | [:heavy_check_mark:](https://twitter.com/mcbroom_evan) |
 
 ## Remote Code Execution
 
